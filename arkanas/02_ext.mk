@@ -599,7 +599,7 @@ download-slang: .slang-obtained
 # Compile slang
 slang: download-slang .slang-done
 .slang-done:
-	cd $(SLANG_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-readline=gnu && $(MAKE) RPATH= && $(MAKE) DESTDIR=$(STAGING_PATH) RPATH= install
+	cd $(SLANG_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-readline=gnu --with-pcre=no && $(MAKE) RPATH= && $(MAKE) DESTDIR=$(STAGING_PATH) RPATH= install
 	touch .slang-done
 
 # Download curl
