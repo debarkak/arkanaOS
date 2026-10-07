@@ -310,7 +310,7 @@ download-python3: .python3-obtained
 # Compile python3
 python3: download-python3 .python3-done
 .python3-done:
-	cd $(PYTHON3_PATH) && CXX="/usr/bin/g++" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib" ./configure --prefix=/usr --enable-shared --with-system-expat --with-system-ffi --with-openssl=$(STAGING_PATH)/usr --enable-optimizations --with-ensurepip=no && \
+	cd $(PYTHON3_PATH) && CXX="/usr/bin/g++" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib" ./configure --prefix=/usr --enable-shared --with-system-expat --with-system-ffi --with-openssl=$(STAGING_PATH)/usr --enable-optimizations --with-ensurepip=no --without-system-libmpdec && \
 	$(MAKE) -j$(THREADS) && \
 	$(MAKE) DESTDIR=$(STAGING_PATH) install && \
 	ln -sf python3 $(STAGING_PATH)/usr/bin/python && \
