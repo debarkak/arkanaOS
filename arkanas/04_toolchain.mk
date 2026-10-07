@@ -367,3 +367,4 @@ download-sqlite3: .sqlite3-obtained
 sqlite3: download-sqlite3 .sqlite3-done
 .sqlite3-done:
 	cd $(SQLITE3_PATH) && CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib" ./configure --prefix=/usr --enable-shared --disable-static --disable-readline --disable-editline && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	touch .sqlite3-done
