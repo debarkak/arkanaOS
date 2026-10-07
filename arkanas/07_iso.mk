@@ -630,7 +630,7 @@ iso:
 	rm -f $(STAGING_PATH)/etc/ld.so.cache || true
 	/sbin/ldconfig -r $(STAGING_PATH) || true
 
-	mksquashfs $(STAGING_PATH) $(ISO_STAGING_PATH)/boot/rootfs.sfs -comp zstd -Xcompression-level 15 -b 1M -noappend -e boot/vmlinuz boot/initramfs.img || true
+	mksquashfs $(STAGING_PATH) $(ISO_STAGING_PATH)/boot/rootfs.sfs -comp zstd -Xcompression-level 15 -b 1M -noappend -e boot/vmlinuz boot/initramfs.img
 	cp $(LINUX_PATH)/arch/x86/boot/bzImage $(ISO_STAGING_PATH)/boot/vmlinuz
 
 	echo 'set timeout=5' > $(ISO_STAGING_PATH)/boot/grub/grub.cfg
