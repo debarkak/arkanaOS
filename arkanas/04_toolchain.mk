@@ -362,3 +362,4 @@ gdbm: download-gdbm .gdbm-done
 # SQLite support for target Python
 download-sqlite3: .sqlite3-obtained
 .sqlite3-obtained:
+	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O sqlite-autoconf-$(SQLITE3_CODE).tar.gz $(SQLITE3_URL) && tar xf sqlite-autoconf-$(SQLITE3_CODE).tar.gz
