@@ -494,7 +494,7 @@ download-newt: .newt-obtained
 # Compile newt
 newt: download-newt .newt-done
 .newt-done:
-	cd $(NEWT_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --with-gpm-support --with-python=python3.13 --without-tcl && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	cd $(NEWT_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --with-gpm-support --without-python --without-tcl && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .newt-done
 
 # Download libndp
@@ -1042,5 +1042,4 @@ licenses: download-licenses .licenses-done
 	done
 	python3 -c "import json; ids=[l['licenseId'] for l in json.load(open('$(LICENSES_PATH)/json/licenses.json'))['licenses'] if not l['isDeprecatedLicenseId']]; open('$(STAGING_PATH)/usr/share/licenses/known_spdx_license_identifiers.txt','w').write('\n'.join(ids)+'\n'); ids=[e['licenseExceptionId'] for e in json.load(open('$(LICENSES_PATH)/json/exceptions.json'))['exceptions']]; open('$(STAGING_PATH)/usr/share/licenses/known_spdx_license_exceptions.txt','w').write('\n'.join(ids)+'\n')"
 	touch .licenses-done
-
 
