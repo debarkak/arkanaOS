@@ -660,7 +660,7 @@ download-iptables: .iptables-obtained
 # Compile iptables
 iptables: download-iptables .iptables-done
 .iptables-done:
-	cd $(IPTABLES_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --disable-nftables --enable-libipq && $(MAKE) -j$(THREADS) && \
+	cd $(IPTABLES_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --disable-nftables --disable-connlabel --enable-libipq && $(MAKE) -j$(THREADS) && \
 	$(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .iptables-done
 
