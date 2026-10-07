@@ -349,4 +349,5 @@ download-automake: .automake-obtained
 automake: download-automake .automake-done
 .automake-done:
 	cd $(AUTOMAKE_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --docdir=/usr/share/doc/automake-$(AUTOMAKE_VER) && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
-	touch .automake-done
+touch .automake-done
+# Target database libraries used by Python and Perl
