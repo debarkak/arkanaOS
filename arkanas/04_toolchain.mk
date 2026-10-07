@@ -104,6 +104,7 @@ PYTHON3_PATH = $(SRC_PATH)/Python-$(PYTHON3_VER)
 GDBM_URL = https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz
 GDBM_VER = 1.26
 GDBM_PATH = $(SRC_PATH)/gdbm-$(GDBM_VER)
+SQLITE3_URL = https://www.sqlite.org/2026/sqlite-autoconf-3530400.tar.gz
 
 # Perl (dependency of autoconf)
 # URL: https://www.linuxfromscratch.org/lfs/view/systemd/chapter08/perl.html
