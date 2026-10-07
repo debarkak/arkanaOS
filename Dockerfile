@@ -4,7 +4,7 @@ ENV PACMAN_NOCONFIRM=1
 ENV NINJAFLAGS="-j$(nproc)"
 ENV CFLAGS="-O2 -pipe -std=gnu17"
 ENV CXXFLAGS="-O2 -pipe -std=gnu++17"
-ENV LDFLAGS="-fuse-ld=mold -Wl,-O1 --as-needed"
+ENV LDFLAGS="-fuse-ld=mold -Wl,-O1 -Wl,--as-needed"
 ENV RUSTFLAGS="-C link-arg=-fuse-ld=mold"
 ENV PATH="/usr/lib/ccache/bin:$PATH"
 ENV CCACHE_COMPRESS=1
