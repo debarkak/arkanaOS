@@ -356,7 +356,7 @@ download-glibc: .glibc-obtained
 
 .glibc-obtained:
 	mkdir -p $(SRC_PATH)
-	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O glibc-$(GLIBC_VER).tar.gz $(GLIBC_URL) && tar xf glibc-$(GLIBC_VER).tar.gz
+	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O glibc-$(GLIBC_VER).tar.xz $(GLIBC_URL) && tar xf glibc-$(GLIBC_VER).tar.xz
 	touch .glibc-obtained
 
 # Compile Glibc
