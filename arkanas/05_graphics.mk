@@ -238,7 +238,7 @@ xorgproto: download-xorgproto .xorgproto-done
 	mkdir -p $(XORGPROTO_PATH)/build && cd $(XORGPROTO_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release && ninja && DESTDIR=$(STAGING_PATH) ninja install
 	touch .xorgproto-done
 
-XTRANS_URL = https://www.x.org/pub/individual/lib/xtrans-1.5.1.tar.xz
+XTRANS_URL = https://xorg.freedesktop.org/releases/individual/lib/xtrans-1.5.1.tar.xz
 XTRANS_VER = 1.5.1
 XTRANS_PATH = $(SRC_PATH)/xtrans-$(XTRANS_VER)
 
