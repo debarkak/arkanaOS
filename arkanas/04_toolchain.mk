@@ -356,3 +356,4 @@ download-gdbm: .gdbm-obtained
 	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O gdbm-$(GDBM_VER).tar.gz $(GDBM_URL) && tar xf gdbm-$(GDBM_VER).tar.gz
 	touch .gdbm-obtained
 gdbm: download-gdbm .gdbm-done
+.gdbm-done:
