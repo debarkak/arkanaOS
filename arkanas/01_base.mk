@@ -5,7 +5,7 @@ THREADS = $(shell nproc)
 
 # Set working paths
 SRC_PATH = $(shell realpath -m ./src)
-STAGING_PATH = $(shell realpath ./staging)
+STAGING_PATH = $(shell realpath -m ./staging)
 OUTPUT_PATH = $(shell realpath ./output)
 
 # Build number
