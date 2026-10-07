@@ -361,3 +361,4 @@ gdbm: download-gdbm .gdbm-done
 	touch .gdbm-done
 # SQLite support for target Python
 download-sqlite3: .sqlite3-obtained
+.sqlite3-obtained:
