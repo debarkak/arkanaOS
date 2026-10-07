@@ -593,7 +593,7 @@ initramfs:
 .PHONY: boot-initramfs
 boot-initramfs:
 	cp bootinit $(CPIO_STAGING_PATH)/init
-	cd $(CPIO_STAGING_PATH) && find . | cpio -oH newc | gzip > $(STAGING_PATH)/boot/initramfs.img
+	bash -o pipefail -c 'cd "$(CPIO_STAGING_PATH)" && find . | cpio -oH newc | gzip > "$(STAGING_PATH)/boot/initramfs.img"'
 
 # Create ISO file for booting
 .PHONY: iso
