@@ -5,7 +5,7 @@ THREADS = $(shell nproc)
 .NOTPARALLEL:
 
 # Paths used to build the ISO components
-SRC_PATH = $(shell realpath ./src)
+SRC_PATH = $(shell realpath -m ./src)
 STAGING_PATH = $(shell realpath ./staging)
 CPIO_STAGING_PATH = $(shell realpath ./cpio-staging)
 ISO_STAGING_PATH = $(shell realpath ./iso-staging)
