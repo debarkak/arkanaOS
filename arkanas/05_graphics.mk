@@ -427,7 +427,7 @@ xorg-fonts: download-xorg-fonts xorg-apps bdftopcf .xorg-fonts-done
 .xorg-fonts-done: .bdftopcf-done
 	mkdir -p $(STAGING_PATH)/usr/bin
 	if ! [ -x $(BDFTOPCF) ]; then \
-	  printf '#!/bin/sh\nexit 0\n' > $(STAGING_PATH)/usr/bin/bdftopcf && chmod +x $(STAGING_PATH)/usr/bin/bdftopcf; \
+	  echo 'bdftopcf is required to build X.Org fonts' >&2; exit 1; \
 	fi
 	for pair in $(X11_PARSED_FONTS); do \
 	  font=$${pair%%/*}; \
