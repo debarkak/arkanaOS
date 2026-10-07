@@ -353,3 +353,4 @@ touch .automake-done
 # Target database libraries used by Python and Perl
 download-gdbm: .gdbm-obtained
 .gdbm-obtained:
+	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O gdbm-$(GDBM_VER).tar.gz $(GDBM_URL) && tar xf gdbm-$(GDBM_VER).tar.gz
