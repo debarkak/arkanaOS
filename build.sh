@@ -27,6 +27,7 @@ docker build -t arkana-builder .
 docker run --rm -i --init \
   --cap-add=MKNOD \
   -v "$(pwd):/build/arkana" \
+  -v "$(pwd)/.git:/build/arkana/.git:ro" \
   -v "$(pwd)/src:/build/arkana/src" \
   -v "$(pwd)/staging:/build/arkana/staging" \
   -v "$(pwd)/output:/build/arkana/output" \
