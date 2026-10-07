@@ -402,6 +402,7 @@ xorg-apps: download-xorg-apps xbitmaps .xorg-apps-done
 	done
 	touch .xorg-apps-done
 
+# Download and build bdftopcf as a host utility
 # Download Xorg fonts
 download-xorg-fonts: .xorg-fonts-obtained
 .xorg-fonts-obtained:
