@@ -276,7 +276,7 @@ download-libxml2: .libxml2-obtained
 # Compile libxml2
 libxml2: download-libxml2 .libxml2-done
 .libxml2-done:
-	cd $(LIBXML2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-history PYTHON=/usr/bin/python3 --docdir=/usr/share/doc/libxml2-$(LIBXML2_VER) && \
+	cd $(LIBXML2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-history --without-python --docdir=/usr/share/doc/libxml2-$(LIBXML2_VER) && \
 	$(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install && sed '/libs=/s/xml2.*/xml2"/' -i $(STAGING_PATH)/usr/bin/xml2-config
 	touch .libxml2-done
 
