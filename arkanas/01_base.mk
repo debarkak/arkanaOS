@@ -1143,7 +1143,7 @@ download-dbus: .dbus-obtained
 dbus: download-dbus .dbus-done
 .dbus-done:
 	mkdir -p $(DBUS_PATH)/build && cd $(DBUS_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release --wrap-mode=nofallback .. && ninja && \
-	DESTDIR=$(STAGING_PATH) ninja install && chown 0:18 $(STAGING_PATH)/usr/lib/dbus-daemon-launch-helper || true && \
+	DESTDIR=$(STAGING_PATH) ninja install || exit 1 && chown 0:18 $(STAGING_PATH)/usr/lib/dbus-daemon-launch-helper || true && \
 	chmod 4750 $(STAGING_PATH)/usr/lib/dbus-daemon-launch-helper || true && if [ -e $(STAGING_PATH)/usr/share/doc/dbus ]; then rm -rf $(STAGING_PATH)/usr/share/doc/dbus-$(DBUS_VER) && \
 	mv $(STAGING_PATH)/usr/share/doc/dbus{,-$(DBUS_VER)}; fi && rm -rf $(STAGING_PATH)/usr/bin/dbus-launch
 	touch .dbus-done
