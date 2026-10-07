@@ -633,6 +633,7 @@ iso:
 
 	mksquashfs $(STAGING_PATH) $(ISO_STAGING_PATH)/boot/rootfs.sfs -comp zstd -Xcompression-level 15 -b 1M -noappend -e boot/vmlinuz boot/initramfs.img
 	cp $(LINUX_PATH)/arch/x86/boot/bzImage $(ISO_STAGING_PATH)/boot/vmlinuz
+	cp $(STAGING_PATH)/boot/initramfs.img $(ISO_STAGING_PATH)/boot/boot-initramfs.img
 
 	echo 'set timeout=5' > $(ISO_STAGING_PATH)/boot/grub/grub.cfg
 	echo 'set default=0' >> $(ISO_STAGING_PATH)/boot/grub/grub.cfg
