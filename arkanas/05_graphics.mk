@@ -409,6 +409,7 @@ download-bdftopcf: .bdftopcf-obtained
 	touch .bdftopcf-obtained
 bdftopcf: xorgproto download-bdftopcf .bdftopcf-done
 .bdftopcf-done:
+	cd $(BDFTOPCF_PATH) && PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" ./configure --prefix="$(SRC_PATH)/host-tools" && $(MAKE) -j$(THREADS) && $(MAKE) install
 # Download Xorg fonts
 download-xorg-fonts: .xorg-fonts-obtained
 .xorg-fonts-obtained:
