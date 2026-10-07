@@ -352,3 +352,4 @@ automake: download-automake .automake-done
 touch .automake-done
 # Target database libraries used by Python and Perl
 download-gdbm: .gdbm-obtained
+.gdbm-obtained:
