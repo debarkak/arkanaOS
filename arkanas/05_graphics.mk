@@ -406,6 +406,7 @@ xorg-apps: download-xorg-apps xbitmaps .xorg-apps-done
 download-bdftopcf: .bdftopcf-obtained
 .bdftopcf-obtained:
 	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O bdftopcf-$(BDFTOPCF_VER).tar.xz $(BDFTOPCF_URL) && tar xf bdftopcf-$(BDFTOPCF_VER).tar.xz
+	touch .bdftopcf-obtained
 # Download Xorg fonts
 download-xorg-fonts: .xorg-fonts-obtained
 .xorg-fonts-obtained:
