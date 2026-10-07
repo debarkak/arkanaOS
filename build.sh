@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-mkdir -p output
+mkdir -p output src staging
 
 # Build process can be uncapped. This will be faster but will use up more resources.
 CPUS=$(nproc)
