@@ -178,6 +178,7 @@ fi
 
 if [ "$USES_EFI" == 0 ]; then
   KERNEL_PATH=/vmlinuz
+  INITRAMFS_PATH=/initramfs.img
 else
   KERNEL_PATH=/boot/vmlinuz
 fi
