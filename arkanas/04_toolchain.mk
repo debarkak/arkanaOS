@@ -106,6 +106,7 @@ GDBM_VER = 1.26
 GDBM_PATH = $(SRC_PATH)/gdbm-$(GDBM_VER)
 SQLITE3_URL = https://www.sqlite.org/2026/sqlite-autoconf-3530400.tar.gz
 SQLITE3_CODE = 3530400
+SQLITE3_PATH = $(SRC_PATH)/sqlite-autoconf-$(SQLITE3_CODE)
 
 # Perl (dependency of autoconf)
 # URL: https://www.linuxfromscratch.org/lfs/view/systemd/chapter08/perl.html
