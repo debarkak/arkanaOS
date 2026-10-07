@@ -387,7 +387,7 @@ systemd: download-systemd kernel-headers .systemd-done
 
 .systemd-done:
 	rm -rf $(SYSTEMD_PATH)/build
-	sed -i 's/grep -Ev '\''^#define\[\[:space:\]\]+(ECANCELLED|EREFUSED)'\''/grep -Ev '\''^#define\[\[:space:\]\]+(ECANCELLED|EREFUSED|EFSBADCRC|EFSCORRUPTED)'\''/g' $(SYSTEMD_PATH)/src/basic/generate-errno-list.sh
+	sed -i -e 's/(ECANCELLED|EREFUSED|EFSBADCRC|EFSCORRUPTED)/(ECANCELLED|EREFUSED|EFSBADCRC|EFSCORRUPTED|EFTYPE)/g' -e 's/(ECANCELLED|EREFUSED)/(ECANCELLED|EREFUSED|EFSBADCRC|EFSCORRUPTED|EFTYPE)/g' $(SYSTEMD_PATH)/src/basic/generate-errno-list.sh
 	sed -i 's/-Werror=override-init/-Wno-override-init/g' $(SYSTEMD_PATH)/meson.build
 	mkdir -p $(SYSTEMD_PATH)/build
 	cd $(SYSTEMD_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release -Dwerror=false -Dc_args="-Wno-override-init -Wno-error=override-init" \
