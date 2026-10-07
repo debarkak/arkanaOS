@@ -105,7 +105,7 @@ check-libs:
 	echo "checking missing libraries..."
 	> $(MISSING_LIBS)
 	while read -r file; do \
-	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\" 2>/dev/null" | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
+	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
 	done < $(EXECUTABLES)
 	while read -r file; do \
 	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\" 2>/dev/null" | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
