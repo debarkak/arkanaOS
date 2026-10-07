@@ -425,7 +425,6 @@ download-xorg-fonts: .xorg-fonts-obtained
 # Compile Xorg fonts
 xorg-fonts: download-xorg-fonts xorg-apps bdftopcf .xorg-fonts-done
 .xorg-fonts-done: .bdftopcf-done
-	mkdir -p $(STAGING_PATH)/usr/bin
 	if ! [ -x $(BDFTOPCF) ]; then \
 	  echo 'bdftopcf is required to build X.Org fonts' >&2; exit 1; \
 	fi
