@@ -79,7 +79,7 @@ XORG_XKEYBOARD_CONFIG_PATH = $(SRC_PATH)/xkeyboard-config-$(XORG_XKEYBOARD_CONFI
 
 # Xorg Input Drivers
 # URL: https://www.linuxfromscratch.org/blfs/view/systemd/x/x7driver.html
-XF86_INPUT_EVDEV_URL = https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
+XF86_INPUT_EVDEV_URL = https://xorg.freedesktop.org/releases/individual/driver/xf86-input-evdev-2.11.0.tar.xz
 XF86_INPUT_EVDEV_VER = 2.11.0
 XF86_INPUT_EVDEV_PATH = $(SRC_PATH)/xf86-input-evdev-$(XF86_INPUT_EVDEV_VER)
 
