@@ -9,7 +9,7 @@ SRC_PATH = $(shell realpath -m ./src)
 STAGING_PATH = $(shell realpath -m ./staging)
 CPIO_STAGING_PATH = $(shell realpath -m ./cpio-staging)
 ISO_STAGING_PATH = $(shell realpath -m ./iso-staging)
-OUTPUT_PATH = $(shell realpath ./output)
+OUTPUT_PATH = $(shell realpath -m ./output)
 
 # Cpio
 # URL: https://www.linuxfromscratch.org/blfs/view/systemd/general/cpio.html
