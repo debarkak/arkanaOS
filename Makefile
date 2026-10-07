@@ -39,7 +39,7 @@ CFLAGS += -mtls-dialect=gnu  # If not set, libgallium will use GLIBC_ABI_GNU2_TL
 export CFLAGS CC CXX CLANG CLANGXX SHELL
 
 # Paths used in the build
-SRC_PATH = $(shell realpath ./src)
+SRC_PATH = $(shell realpath -m ./src)
 STAGING_PATH = $(shell realpath ./staging)
 ISO_STAGING_PATH = $(shell realpath ./iso-staging)
 CPIO_STAGING_PATH = $(shell realpath ./cpio-staging)
