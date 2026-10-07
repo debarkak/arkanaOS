@@ -122,7 +122,7 @@ if [ -e /sys/firmware/efi/efivars ]; then
   fi
 else
   echo "Found a legacy system."
-  parted "${SELDEV}" \ mklabel msdos \ mkpart primary 1 120M \ mkpart primary 120M 100% -s
+  parted -s "${SELDEV}" mklabel msdos mkpart primary 1MiB 120MiB mkpart primary 120MiB 100%
   if [ "$BLKDEV_ISPART" == 0 ]; then
     mkfs.vfat "${SELDEV}1"
     mkfs.ext4 -F "${SELDEV}2"
