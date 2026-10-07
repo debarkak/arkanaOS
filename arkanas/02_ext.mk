@@ -494,7 +494,7 @@ download-newt: .newt-obtained
 # Compile newt
 newt: download-newt .newt-done
 .newt-done:
-	cd $(NEWT_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --with-gpm-support --with-python=python3.13 && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	cd $(NEWT_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --with-gpm-support --with-python=python3.13 --without-tcl && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .newt-done
 
 # Download libndp
