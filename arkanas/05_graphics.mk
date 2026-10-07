@@ -417,7 +417,7 @@ download-xorg-fonts: .xorg-fonts-obtained
 	for pair in $(X11_PARSED_FONTS); do \
 	  font=$${pair%%/*}; \
 	  ver=$${pair##*/}; \
-	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "$$font-$$ver.tar.xz" "http://xorg.freedesktop.org/releases/individual/font/$$font-$$ver.tar.xz" && \
+	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "$$font-$$ver.tar.xz" "https://xorg.freedesktop.org/releases/individual/font/$$font-$$ver.tar.xz" && \
 	  tar xf "$$font-$$ver.tar.xz" || exit 1; \
 	done
 	touch .xorg-fonts-obtained
