@@ -90,7 +90,7 @@ fi
 
 if [[ "$SELDEV" =~ ^/dev/nvme[0-9]+n[0-9]+$ ]]; then
   BLKDEV_ISPART=1
-elif [ "$SELDEV" == "/dev/mmcblk0" ]; then
+elif [[ "$SELDEV" =~ ^/dev/mmcblk[0-9]+$ ]]; then
   BLKDEV_ISPART=1
 else
   BLKDEV_ISPART=0
