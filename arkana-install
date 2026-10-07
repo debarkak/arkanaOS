@@ -181,6 +181,7 @@ if [ "$USES_EFI" == 0 ]; then
   INITRAMFS_PATH=/initramfs.img
 else
   KERNEL_PATH=/boot/vmlinuz
+  INITRAMFS_PATH=/boot/initramfs.img
 fi
 
 cat >> /mnt/etc/grub.d/29_main << EOF
