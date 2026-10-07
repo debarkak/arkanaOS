@@ -101,6 +101,7 @@ EXPAT_PATH = $(SRC_PATH)/expat-$(EXPAT_VER)
 PYTHON3_URL = https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz
 PYTHON3_VER = 3.13.7
 PYTHON3_PATH = $(SRC_PATH)/Python-$(PYTHON3_VER)
+GDBM_URL = https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz
 
 # Perl (dependency of autoconf)
 # URL: https://www.linuxfromscratch.org/lfs/view/systemd/chapter08/perl.html
