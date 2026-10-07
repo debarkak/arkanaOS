@@ -42,7 +42,7 @@ export CFLAGS CC CXX CLANG CLANGXX SHELL
 SRC_PATH = $(shell realpath -m ./src)
 STAGING_PATH = $(shell realpath -m ./staging)
 ISO_STAGING_PATH = $(shell realpath -m ./iso-staging)
-CPIO_STAGING_PATH = $(shell realpath ./cpio-staging)
+CPIO_STAGING_PATH = $(shell realpath -m ./cpio-staging)
 OUTPUT_PATH = $(shell realpath ./output)
 
 # Dependency checking
