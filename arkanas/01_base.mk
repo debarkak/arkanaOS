@@ -4,7 +4,7 @@ THREADS = $(shell nproc)
 .NOTPARALLEL:
 
 # Set working paths
-SRC_PATH = $(shell realpath ./src)
+SRC_PATH = $(shell realpath -m ./src)
 STAGING_PATH = $(shell realpath ./staging)
 OUTPUT_PATH = $(shell realpath ./output)
 
