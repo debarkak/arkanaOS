@@ -407,7 +407,7 @@ download-bdftopcf: .bdftopcf-obtained
 .bdftopcf-obtained:
 	cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O bdftopcf-$(BDFTOPCF_VER).tar.xz $(BDFTOPCF_URL) && tar xf bdftopcf-$(BDFTOPCF_VER).tar.xz
 	touch .bdftopcf-obtained
-bdftopcf: xorgproto download-bdftopcf .bdftopcf-done
+bdftopcf: .bdftopcf-done
 .bdftopcf-done:
 	cd $(BDFTOPCF_PATH) && PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" ./configure --prefix="$(SRC_PATH)/host-tools" && $(MAKE) -j$(THREADS) && $(MAKE) install
 	touch .bdftopcf-done
