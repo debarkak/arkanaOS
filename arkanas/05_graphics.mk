@@ -73,7 +73,7 @@ XORG_XINIT_PATH = $(SRC_PATH)/xinit-$(XORG_XINIT_VER)
 
 # XKeyboardConfig 
 # URL: https://www.linuxfromscratch.org/blfs/view/systemd/x/xkeyboard-config.html
-XORG_XKEYBOARD_CONFIG_URL = https://www.x.org/pub/individual/data/xkeyboard-config/xkeyboard-config-2.45.tar.xz
+XORG_XKEYBOARD_CONFIG_URL = https://xorg.freedesktop.org/releases/individual/data/xkeyboard-config/xkeyboard-config-2.45.tar.xz
 XORG_XKEYBOARD_CONFIG_VER = 2.45
 XORG_XKEYBOARD_CONFIG_PATH = $(SRC_PATH)/xkeyboard-config-$(XORG_XKEYBOARD_CONFIG_VER)
 
