@@ -358,3 +358,4 @@ download-gdbm: .gdbm-obtained
 gdbm: download-gdbm .gdbm-done
 .gdbm-done:
 	cd $(GDBM_PATH) && CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib" ./configure --prefix=/usr --disable-static --enable-libgdbm-compat && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	touch .gdbm-done
