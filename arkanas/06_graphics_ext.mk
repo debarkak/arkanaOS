@@ -70,7 +70,7 @@ JBIG_KIT_VER = 2.1
 JBIG_KIT_PATH = $(SRC_PATH)/jbigkit-$(JBIG_KIT_VER)
 
 # XWayland
-XWAYLAND_URL = https://www.x.org/pub/individual/xserver/xwayland-24.1.9.tar.xz
+XWAYLAND_URL = https://xorg.freedesktop.org/releases/individual/xserver/xwayland-24.1.9.tar.xz
 XWAYLAND_VER = 24.1.9
 XWAYLAND_PATH = $(SRC_PATH)/xwayland-$(XWAYLAND_VER)
 
