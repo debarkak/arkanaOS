@@ -28,7 +28,6 @@ docker run --rm -i --init \
   --cap-add=MKNOD \
   -v "$(pwd):/build/arkana" \
   -v "$(pwd)/.git:/build/arkana/.git:ro" \
-  -v "$(pwd)/output:/build/arkana/output" \
   -e HOST_UID="$(id -u)" \
   -e HOST_GID="$(id -g)" \
   --memory=${CONTAINER_RAM}g \
