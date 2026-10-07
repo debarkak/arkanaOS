@@ -26,6 +26,7 @@ echo "Starting build process. This will take several hours."
 docker build -t arkana-builder .
 docker run --rm -i --init \
   --cap-add=MKNOD \
+  -v "$(pwd):/build/arkana" \
   -v "$(pwd)/src:/build/arkana/src" \
   -v "$(pwd)/staging:/build/arkana/staging" \
   -v "$(pwd)/output:/build/arkana/output" \
