@@ -15,7 +15,7 @@ BUILDNUM_FILE := $(shell realpath .buildnum)
 # Glibc
 # URL: https://www.linuxfromscratch.org/lfs/view/systemd/chapter05/glibc.html
 GLIBC_URL = https://ftp.gnu.org/gnu/glibc/glibc-$(GLIBC_VER).tar.xz
-GLIBC_VER = 2.43
+GLIBC_VER = 2.44
 GLIBC_PATH = $(SRC_PATH)/glibc-$(GLIBC_VER)
 
 # Systemd
