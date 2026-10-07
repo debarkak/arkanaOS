@@ -424,7 +424,7 @@ download-xorg-fonts: .xorg-fonts-obtained
 
 # Compile Xorg fonts
 xorg-fonts: download-xorg-fonts xorg-apps bdftopcf .xorg-fonts-done
-.xorg-fonts-done:
+.xorg-fonts-done: .bdftopcf-done
 	mkdir -p $(STAGING_PATH)/usr/bin
 	if ! [ -x $(STAGING_PATH)/usr/bin/bdftopcf ]; then \
 	  printf '#!/bin/sh\nexit 0\n' > $(STAGING_PATH)/usr/bin/bdftopcf && chmod +x $(STAGING_PATH)/usr/bin/bdftopcf; \
