@@ -125,6 +125,5 @@ clean:
 
 # There are no test suites in arkanaOS, but we can run QEMU to start the built system.
 .PHONY: test
-.IGNORE: test check-libs
 test: check-libs
 	qemu-system-x86_64 -cdrom $(OUTPUT_PATH)/arkana.iso -m 1G -vnc :0
