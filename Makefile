@@ -100,6 +100,7 @@ check-libs:
 
 	find $(STAGING_PATH)/usr/bin -type f -executable -printf '/usr/bin/%P\n' > $(EXECUTABLES)
 	find $(STAGING_PATH)/usr/sbin -type f -executable -printf '/usr/sbin/%P\n' >> $(EXECUTABLES)
+	find $(STAGING_PATH)/opt -type f -executable -printf '/opt/%P\n' >> $(EXECUTABLES)
 	# systemd incorrectly triggers a missing library, ignore it here
 	find $(STAGING_PATH)/usr/lib -type f -name "*.so*" ! -name "libsystemd-core-257.so" -printf '/usr/lib/%P\n' > $(LIBRARIES)
 
