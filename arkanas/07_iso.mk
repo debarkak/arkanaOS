@@ -1,5 +1,6 @@
 # Enable multi-threaded Bash operation
 SHELL = bash
+.DEFAULT_GOAL := all
 THREADS = $(shell nproc)
 .NOTPARALLEL:
 
