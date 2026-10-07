@@ -12,7 +12,7 @@ OUTPUT_PATH = $(shell realpath ./output)
 
 # Xorg Server
 # URL: https://www.linuxfromscratch.org/blfs/view/systemd/x/xorg-server.html
-XORG_SERVER_URL = https://www.x.org/pub/individual/xserver/xorg-server-21.1.18.tar.xz
+XORG_SERVER_URL = https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-21.1.18.tar.xz
 XORG_SERVER_VER = 21.1.18
 XORG_SERVER_PATH = $(SRC_PATH)/xorg-server-$(XORG_SERVER_VER)
 
