@@ -224,7 +224,7 @@ X11_PARSED_FONTS := $(foreach i, $(shell seq 1 $(words $(X11_FONTS))), \
 # Targets
 all: xorgproto xtrans pixman freetype font-util fontconfig xbitmaps xorg-libs libdrm mesa xorg-server libbsd libmd lm-sensors llvm libedit spirv-tools xinit xorg-apps xorg-fonts xorg-xkeyboard-config xf86-input-evdev openbox fribidi xterm luit libevdev mtdev libgudev libwacom libinput feh imlib2 libdatrie libthai harfbuzz cairo pango libdav1d libjpeg-turbo gdk-pixbuf librsvg wmaker
 
-XORGPROTO_URL = https://www.x.org/pub/individual/proto/xorgproto-2024.1.tar.xz
+XORGPROTO_URL = https://xorg.freedesktop.org/releases/individual/proto/xorgproto-2024.1.tar.xz
 XORGPROTO_VER = 2024.1
 XORGPROTO_PATH = $(SRC_PATH)/xorgproto-$(XORGPROTO_VER)
 
