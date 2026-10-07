@@ -387,7 +387,7 @@ download-xorg-apps: .xorg-apps-obtained
 	for pair in $(X11_PARSED_APPS); do \
 	  app=$${pair%%/*}; \
 	  ver=$${pair##*/}; \
-	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "$$app-$$ver.tar.xz" "http://xorg.freedesktop.org/releases/individual/app/$$app-$$ver.tar.xz" && \
+	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "$$app-$$ver.tar.xz" "https://xorg.freedesktop.org/releases/individual/app/$$app-$$ver.tar.xz" && \
 	  tar xf "$$app-$$ver.tar.xz" || exit 1; \
 	done
 	touch .xorg-apps-obtained
