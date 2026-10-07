@@ -40,7 +40,7 @@ export CFLAGS CC CXX CLANG CLANGXX SHELL
 
 # Paths used in the build
 SRC_PATH = $(shell realpath -m ./src)
-STAGING_PATH = $(shell realpath ./staging)
+STAGING_PATH = $(shell realpath -m ./staging)
 ISO_STAGING_PATH = $(shell realpath ./iso-staging)
 CPIO_STAGING_PATH = $(shell realpath ./cpio-staging)
 OUTPUT_PATH = $(shell realpath ./output)
