@@ -189,7 +189,7 @@ cat >> /mnt/etc/grub.d/29_main << EOF
 exec tail -n +3 \$0
 menuentry "$PRETTY_NAME" {
   linux $KERNEL_PATH root=$BOOTDEV
-  initrd /boot/initramfs.img
+  initrd $INITRAMFS_PATH
 }
 EOF
 chmod +x /mnt/etc/grub.d/29_main
