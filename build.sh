@@ -33,7 +33,7 @@ docker run --rm -i --init \
   --memory=${CONTAINER_RAM}g \
   --memory-swap=${TOTAL_MEM_SWAP}g \
   --cpus="$CPUS" \
-  arkana-builder
+  arkana-builder sudo make
 
 STAT=$?
 if [ $STAT -eq 0 ]; then
