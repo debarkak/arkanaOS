@@ -361,7 +361,7 @@ download-xorg-libs: .xorg-libs-obtained
 	for pair in $(X11_PARSED_LIBS); do \
 	  lib=$${pair%%/*}; \
 	  ver=$${pair##*/}; \
-	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "lib$$lib-$$ver.tar.xz" "https://www.x.org/pub/individual/lib/lib$$lib-$$ver.tar.xz" && \
+	  cd $(SRC_PATH) && wget --tries=5 --timeout=30 -O "lib$$lib-$$ver.tar.xz" "https://xorg.freedesktop.org/releases/individual/lib/lib$$lib-$$ver.tar.xz" && \
 	  tar xf "lib$$lib-$$ver.tar.xz" || exit 1; \
 	done
 	touch .xorg-libs-obtained
