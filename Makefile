@@ -110,7 +110,7 @@ check-libs:
 	while read -r file; do \
 	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
 	done < $(LIBRARIES)
-	rm $(STAGING_PATH)/dev/null
+	rm -f $(STAGING_PATH)/dev/null
 	if [ -s $(MISSING_LIBS) ]; then \
 	  echo "warning: found missing libraries:"; cat $(MISSING_LIBS) | sort -u; \
 	else \
