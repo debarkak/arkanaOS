@@ -105,6 +105,7 @@ check-libs:
 	# systemd incorrectly triggers a missing library, ignore it here
 	find $(STAGING_PATH)/usr/lib -type f -name "*.so*" ! -name "libsystemd-core-257.so" -printf '/usr/lib/%P\n' > $(LIBRARIES)
 	find $(STAGING_PATH)/opt -type f -name "*.so*" -printf '/opt/%P\n' >> $(LIBRARIES)
+	find $(STAGING_PATH) -maxdepth 1 -type f -name "*.so*" -printf '/%f\n' >> $(LIBRARIES)
 
 	echo "checking missing libraries..."
 	> $(MISSING_LIBS)
