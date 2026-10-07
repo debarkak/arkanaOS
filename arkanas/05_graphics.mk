@@ -423,7 +423,7 @@ download-xorg-fonts: .xorg-fonts-obtained
 	touch .xorg-fonts-obtained
 
 # Compile Xorg fonts
-xorg-fonts: download-xorg-fonts xorg-apps .xorg-fonts-done
+xorg-fonts: download-xorg-fonts xorg-apps bdftopcf .xorg-fonts-done
 .xorg-fonts-done:
 	mkdir -p $(STAGING_PATH)/usr/bin
 	if ! [ -x $(STAGING_PATH)/usr/bin/bdftopcf ]; then \
