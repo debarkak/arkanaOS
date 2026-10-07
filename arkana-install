@@ -88,7 +88,7 @@ if [ "$BLKDEV_MOUNTEDAS" != "overlay" ]; then
   false
 fi
 
-if [ "$SELDEV" == "/dev/nvme0n1" ]; then
+if [[ "$SELDEV" =~ ^/dev/nvme[0-9]+n[0-9]+$ ]]; then
   BLKDEV_ISPART=1
 elif [ "$SELDEV" == "/dev/mmcblk0" ]; then
   BLKDEV_ISPART=1
