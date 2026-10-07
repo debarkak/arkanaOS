@@ -212,7 +212,7 @@ X11_PARSED_APPS := $(foreach i, $(shell seq 1 $(words $(X11_APPS))), \
   $(word $(i), $(X11_APPS))/$(word $(i), $(X11_APP_VERS)))
 
 BDFTOPCF_VER = 1.1.2
-BDFTOPCF_URL = https://www.x.org/pub/individual/util/bdftopcf-1.1.2.tar.xz
+BDFTOPCF_URL = https://www.x.org/pub/individual/util/bdftopcf-$(BDFTOPCF_VER).tar.xz
 X11_FONTS = font-util encodings font-alias font-adobe-utopia-type1 font-bh-ttf font-bh-type1 font-ibm-type1 font-misc-ethiopic font-xfree86-type1 font-cursor-misc
 X11_FONT_VERS = 1.4.1 1.1.0 1.0.5 1.0.5 1.0.4 1.0.4 1.0.4 1.0.5 1.0.5 1.0.4
 
