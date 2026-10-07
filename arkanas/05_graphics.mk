@@ -67,7 +67,7 @@ SPIRV_TOOLS_PATH = $(SRC_PATH)/SPIRV-Tools-vulkan-sdk-$(SPIRV_TOOLS_VER)
 
 # Xinit
 # URL: https://www.linuxfromscratch.org/blfs/view/systemd/x/xinit.html
-XORG_XINIT_URL = https://www.x.org/pub/individual/app/xinit-1.4.4.tar.xz
+XORG_XINIT_URL = https://xorg.freedesktop.org/releases/individual/app/xinit-1.4.4.tar.xz
 XORG_XINIT_VER = 1.4.4
 XORG_XINIT_PATH = $(SRC_PATH)/xinit-$(XORG_XINIT_VER)
 
