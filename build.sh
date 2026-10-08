@@ -24,7 +24,7 @@ echo "Will use $CONTAINER_RAM GB of memory, $CONTAINER_SWAP GB of swap ($TOTAL_M
 
 echo "Starting build process. This will take several hours."
 docker build -t arkana-builder .
-docker run --rm -i --init \
+docker run --rm -it --init \
   --cap-add=MKNOD \
   -v "$(pwd):/build/arkana" \
   -v "$(pwd)/.git:/build/arkana/.git:ro" \
