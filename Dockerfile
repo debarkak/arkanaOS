@@ -117,7 +117,7 @@ RUN sudo ln -sf /bin/true /sbin/ldconfig && \
 CMD ["bash", "-c", "set +e; sudo --preserve-env make; ret=$?; \
 if [ $ret -eq 130 ]; then \
     echo -ne '\n*** BUILD INTERRUPTED — ENTERING DEBUGGING SHELL ***\nThe build process was interrupted (CTRL+C).\nRun `sudo --preserve-env make` to continue building.\nBuild state is saved in the mounted project directory.\n\n'; \
-    exec bash; \
+    bash; sudo --preserve-env make || exit $?; \
 elif [ $ret -ne 0 ]; then \
     echo -ne '\n*** BUILD FAILED — ENTERING DEBUGGING SHELL ***\nThe build process encountered an error and cannot continue.\nFix any errors and run `sudo --preserve-env make` again\nBuild state is saved in the mounted project directory.\n\n'; \
     exec bash; \
