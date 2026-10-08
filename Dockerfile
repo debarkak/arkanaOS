@@ -114,7 +114,7 @@ RUN sudo ln -sf /bin/true /sbin/ldconfig && \
     echo 'waitretry = 10' | sudo tee -a /etc/wgetrc && \
     echo 'retry_connrefused = on' | sudo tee -a /etc/wgetrc
 
-CMD ["bash", "-c", "set +e; sudo make; ret=$?; \
+CMD ["bash", "-c", "set +e; sudo --preserve-env make; ret=$?; \
 if [ $ret -eq 130 ]; then \
     echo -ne '\n*** BUILD INTERRUPTED — ENTERING DEBUGGING SHELL ***\nThe build process was interrupted (CTRL+C).\nRun `sudo make` to continue building.\nBuild state is saved in the mounted project directory.\n\n'; \
     exec bash; \
