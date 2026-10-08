@@ -300,6 +300,7 @@ linux: download-linux .linux-done
 	$(MAKE) -C $(LINUX_PATH) mrproper && cp $(CURDIR)/linux.config $(LINUX_PATH)/.config && cd $(LINUX_PATH) && $(MAKE) olddefconfig && \
 	$(MAKE) -j$(THREADS) KBUILD_BUILD_HOST="arkana" KBUILD_BUILD_USER="arkana" all && cp arch/x86/boot/bzImage $(STAGING_PATH)/boot/vmlinuz && \
 	$(MAKE) -C $(LINUX_PATH) headers_install INSTALL_HDR_PATH=$(STAGING_PATH)/usr
+	$(MAKE) -C $(LINUX_PATH) INSTALL_MOD_PATH=$(STAGING_PATH) modules_install
 	touch .linux-done
 
 # Download GRUB
