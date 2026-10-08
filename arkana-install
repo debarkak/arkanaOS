@@ -113,7 +113,7 @@ if [ -e /sys/firmware/efi/efivars ]; then
     mkdir /mnt/etc
     mount "${SELDEV}1" /mnt/boot/efi
   else
-    mkfs.vfat "${SELDEV}p1"
+    mkfs.vfat -F 32 "${SELDEV}p1"
     mkfs.ext4 -F "${SELDEV}p2"
     mount "${SELDEV}p2" /mnt
     mkdir -p /mnt/boot/efi
