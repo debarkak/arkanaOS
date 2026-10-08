@@ -120,7 +120,7 @@ if [ $ret -eq 130 ]; then \
     bash; sudo --preserve-env make || exit $?; \
 elif [ $ret -ne 0 ]; then \
     echo -ne '\n*** BUILD FAILED — ENTERING DEBUGGING SHELL ***\nThe build process encountered an error and cannot continue.\nFix any errors and run `sudo --preserve-env make` again\nBuild state is saved in the mounted project directory.\n\n'; \
-    exec bash; \
+    bash; sudo --preserve-env make || exit $?; \
 elif [ ${ARKANA_NO_SUCCESSFUL_EXIT:-0} -eq 1 ]; then \
     exec bash; \
 fi"]
