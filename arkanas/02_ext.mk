@@ -663,6 +663,7 @@ iptables: download-iptables .iptables-done
 .iptables-done:
 	cd $(IPTABLES_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --disable-nftables --disable-connlabel --enable-libipq && $(MAKE) -j$(THREADS) && \
 	$(MAKE) DESTDIR=$(STAGING_PATH) install
+	rm -f $(STAGING_PATH)/usr/lib/xtables/libxt_connlabel.so
 	touch .iptables-done
 
 # Download flex
