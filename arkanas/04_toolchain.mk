@@ -278,6 +278,7 @@ libxml2: download-libxml2 .libxml2-done
 .libxml2-done:
 	cd $(LIBXML2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-history --without-python --docdir=/usr/share/doc/libxml2-$(LIBXML2_VER) && \
 	$(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install && sed '/libs=/s/xml2.*/xml2"/' -i $(STAGING_PATH)/usr/bin/xml2-config
+	find $(STAGING_PATH)/usr/lib -type f -path '*/site-packages/*' \( -name 'libxml2mod.*' -o -name libxml2.py -o -name drv_libxml2.py -o -path '*/__pycache__/libxml2.*.pyc' -o -path '*/__pycache__/drv_libxml2.*.pyc' \) -delete
 	touch .libxml2-done
 
 # Download libtool
