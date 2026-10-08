@@ -600,6 +600,7 @@ download-slang: .slang-obtained
 slang: download-slang .slang-done
 .slang-done:
 	cd $(SLANG_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --with-readline=gnu --with-pcre=no && $(MAKE) RPATH= && $(MAKE) DESTDIR=$(STAGING_PATH) RPATH= install
+	rm -f $(STAGING_PATH)/usr/lib/slang/v2/modules/pcre-module.so
 	touch .slang-done
 
 # Download curl
