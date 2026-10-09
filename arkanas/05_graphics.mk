@@ -379,6 +379,9 @@ xorg-libs: download-xorg-libs fontconfig .xorg-libs-done
 	    LIBDIR=$(SRC_PATH)/lib$$lib-$$ver; [ -d "$$LIBDIR" ] || LIBDIR=$(SRC_PATH)/$$lib-$$ver; cd "$$LIBDIR" && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install || exit 1; \
 	  fi; \
 	done
+	# Shared Xorg libraries need no libtool archives; their dependency paths can escape staging.
+	rm -f $(STAGING_PATH)/usr/lib/libX*.la $(STAGING_PATH)/usr/lib/libxcb*.la
+
 	touch .xorg-libs-done
 
 # Download Xorg applications
@@ -675,7 +678,15 @@ download-libwacom: .libwacom-obtained
 # Compile libwacom
 libwacom: download-libwacom libgudev .libwacom-done
 .libwacom-done:
-	mkdir -p $(LIBWACOM_PATH)/build && cd $(LIBWACOM_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release -D tests=disabled && ninja && DESTDIR=$(STAGING_PATH) ninja install && \
+	cp arkanas/libwacom-glib-compat.h $(LIBWACOM_PATH)/libwacom-glib-compat.h && \
+	for file in $(LIBWACOM_PATH)/libwacom/libwacom.c $(LIBWACOM_PATH)/libwacom/libwacom-database.c $(LIBWACOM_PATH)/tools/debug-device.c; do \
+	  if ! grep -qF '#include "../libwacom-glib-compat.h"' "$$file"; then \
+	    case "$$file" in \
+	      */libwacom.c) sed -i '/#include <gudev\/gudev.h>/a #include "../libwacom-glib-compat.h"' "$$file" ;; \
+	      *) sed -i '/#include <glib.h>/a #include "../libwacom-glib-compat.h"' "$$file" ;; \
+	    esac; \
+	  fi; \
+	done && rm -rf $(LIBWACOM_PATH)/build && mkdir -p $(LIBWACOM_PATH)/build && cd $(LIBWACOM_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release -D tests=disabled && ninja && DESTDIR=$(STAGING_PATH) ninja install && \
 	sed -i 's|prefix=/usr|prefix=$(STAGING_PATH)/usr|g' $(STAGING_PATH)/usr/lib/pkgconfig/libwacom.pc
 	touch .libwacom-done
 
@@ -688,7 +699,8 @@ download-libgudev: .libgudev-obtained
 # Compile libgudev
 libgudev: download-libgudev .libgudev-done
 .libgudev-done:
-	mkdir -p $(LIBGUDEV_PATH)/build && cd $(LIBGUDEV_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release -D introspection=disabled -Dc_args="-Wno-error" .. && ninja && DESTDIR=$(STAGING_PATH) ninja install
+	# Reconfigure against the staged GLib ABI; stale Meson state may reference the host GLib.
+	rm -rf $(LIBGUDEV_PATH)/build && mkdir -p $(LIBGUDEV_PATH)/build && cd $(LIBGUDEV_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release -D introspection=disabled -Dc_args="-Wno-error" .. && ninja && DESTDIR=$(STAGING_PATH) ninja install
 	touch .libgudev-done
 
 # Download feh
@@ -714,7 +726,14 @@ download-imlib2: .imlib2-obtained
 imlib2: download-imlib2 .imlib2-done
 .imlib2-done:
 	rm -f $(STAGING_PATH)/usr/lib/libbz2.a
-	cd $(IMLIB2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	cd $(IMLIB2_PATH) && { $(MAKE) distclean >/dev/null 2>&1 || true; } && \
+	PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
+	PKG_CONFIG_LIBDIR="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
+	PKG_CONFIG_SYSROOT_DIR="$(STAGING_PATH)" \
+	CPPFLAGS="-I$(STAGING_PATH)/usr/include" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" \
+	LDFLAGS="-L$(STAGING_PATH)/usr/lib -Wl,-rpath-link=$(STAGING_PATH)/usr/lib" \
+	./configure --prefix=/usr --without-j2k --without-jxl && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install && \
+	rm -f $(STAGING_PATH)/usr/lib/imlib2/loaders/j2k.so $(STAGING_PATH)/usr/lib/imlib2/loaders/jxl.so
 	touch .imlib2-done
 
 # Download cairo
@@ -738,7 +757,9 @@ download-harfbuzz: .harfbuzz-obtained
 # Compile harfbuzz
 harfbuzz: download-harfbuzz .harfbuzz-done
 .harfbuzz-done:
-	mkdir -p $(HARFBUZZ_PATH)/build && cd $(HARFBUZZ_PATH)/build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release -D tests=disabled -D docs=disabled -D introspection=disabled -Dc_args="-Wno-error" -Dcpp_args="-Wno-error" -Dc_link_args="-Wl,-rpath-link=$(STAGING_PATH)/usr/lib -lpng16" -Dcpp_link_args="-Wl,-rpath-link=$(STAGING_PATH)/usr/lib -lpng16" && ninja && DESTDIR=$(STAGING_PATH) ninja install
+	cd $(HARFBUZZ_PATH) && sed -i '/#pragma GCC diagnostic error   "-Wredundant-decls"/d' src/hb.hh && \
+	rm -rf build && mkdir -p build && cd build && meson setup --native-file $(SRC_PATH)/cross_file.txt .. --prefix=/usr --buildtype=release -Dicu=disabled -D tests=disabled -D docs=disabled -D introspection=disabled -Dc_args="-Wno-error=redundant-decls -Wno-error" -Dcpp_args="-Wno-error=redundant-decls -Wno-error" -Dc_link_args="-Wl,-rpath-link=$(STAGING_PATH)/usr/lib -lpng16" -Dcpp_link_args="-Wl,-rpath-link=$(STAGING_PATH)/usr/lib -lpng16" && ninja && DESTDIR=$(STAGING_PATH) ninja install && \
+	rm -f $(STAGING_PATH)/usr/lib/libharfbuzz-icu.so* $(STAGING_PATH)/usr/lib/pkgconfig/harfbuzz-icu.pc
 	touch .harfbuzz-done
 
 # Compile cairo
@@ -750,7 +771,13 @@ cairo: download-cairo .cairo-done
 # Compile pango
 pango: download-pango libthai harfbuzz cairo .pango-done
 .pango-done:
-	cd $(PANGO_PATH) && sed -i '/#include <hb-ft.h>/a #include <fontconfig\/fcfreetype.h>' pango/pangofc-fontmap.c && \
+	cd $(PANGO_PATH) && \
+	if ! grep -qF '#include <fontconfig/fcfreetype.h>' pango/pangofc-fontmap.c; then \
+	  sed -i '/#include <hb-ft.h>/a #include <fontconfig\/fcfreetype.h>' pango/pangofc-fontmap.c; \
+	fi && \
+	if ! grep -qF "'-Wno-error=redundant-decls'" meson.build; then \
+	  sed -i "s/'-Werror=redundant-decls'/'-Wno-error=redundant-decls'/g" meson.build; \
+	fi && \
 	mkdir -p build && cd build && meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release --wrap-mode=nofallback -D introspection=disabled -Dc_args="-Wno-error" -Dc_link_args="-Wl,-rpath-link=$(STAGING_PATH)/usr/lib -lpng16 -lm" .. && ninja && DESTDIR=$(STAGING_PATH) ninja install
 	touch .pango-done
 
@@ -761,9 +788,13 @@ download-libthai: .libthai-obtained
 	touch .libthai-obtained
 
 # Compile libthai
-libthai: download-libthai .libthai-done
+libthai: download-libthai libdatrie .libthai-done
 .libthai-done:
-	cd $(LIBTHAI_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	# Use Arkana's staged libdatrie so libthai's ABI matches the target libraries.
+	cd $(LIBTHAI_PATH) && { $(MAKE) distclean >/dev/null 2>&1 || true; } && \
+	PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" PKG_CONFIG_SYSROOT_DIR="$(STAGING_PATH)" \
+	CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib -Wl,-rpath-link=$(STAGING_PATH)/usr/lib" \
+	./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .libthai-done
 
 # Download libdatrie
@@ -775,7 +806,9 @@ download-libdatrie: .libdatrie-obtained
 # Compile libdatrie
 libdatrie: download-libdatrie .libdatrie-done
 .libdatrie-done:
-	cd $(LIBDATRIE_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	# Mold rejects libdatrie's version-script probe; GNU BFD enables its DATRIE_0.2 ABI symbols.
+	cd $(LIBDATRIE_PATH) && { $(MAKE) distclean >/dev/null 2>&1 || true; } && \
+	CFLAGS="-O2 -std=gnu17" LDFLAGS="-fuse-ld=bfd" ./configure --prefix=/usr && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .libdatrie-done
 
 # Download librsvg
@@ -863,7 +896,12 @@ download-wmaker: .wmaker-obtained
 # Compile Window Maker
 wmaker: download-wmaker .wmaker-done
 .wmaker-done:
-	cd $(WMAKER_PATH) && ./autogen.sh && \
-	CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --sysconfdir=/etc --enable-modelock --enable-pango --with-x --disable-imagemagick && \
+	cd $(WMAKER_PATH) && { $(MAKE) distclean >/dev/null 2>&1 || true; } && ./autogen.sh && \
+	PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
+	PKG_CONFIG_LIBDIR="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
+	PKG_CONFIG_SYSROOT_DIR="$(STAGING_PATH)" \
+	CPPFLAGS="-I$(STAGING_PATH)/usr/include" CFLAGS="-O2 -std=gnu17 -I$(STAGING_PATH)/usr/include" \
+	LDFLAGS="-L$(STAGING_PATH)/usr/lib -Wl,-rpath-link=$(STAGING_PATH)/usr/lib" \
+	./configure --prefix=/usr --sysconfdir=/etc --enable-modelock --enable-pango --with-x --disable-imagemagick && \
 	$(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .wmaker-done

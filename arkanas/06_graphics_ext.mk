@@ -171,9 +171,11 @@ download-libwebp: .libwebp-obtained
 	touch .libwebp-obtained
 
 libwebp: download-libwebp .libwebp-done
+# Shared-only staging does not need libtool archives; they can embed host /usr/lib paths.
 .libwebp-done:
 	cd $(LIBWEBP_PATH) && ./configure CFLAGS="-O2 -std=gnu17" --prefix=/usr --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder \
-	--enable-libwebpextras --enable-swap-16bit-csp --disable-static && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	--enable-libwebpextras --enable-swap-16bit-csp --disable-static && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install && \
+	rm -f $(STAGING_PATH)/usr/lib/libwebp*.la $(STAGING_PATH)/usr/lib/libsharpyuv.la
 	touch .libwebp-done
 
 download-giflib: .giflib-obtained
@@ -275,11 +277,15 @@ download-wlroots: .wlroots-obtained
 
 wlroots: download-wlroots libdisplay-info seatd hwdata .wlroots-done
 .wlroots-done:
-	cd $(WLROOTS_PATH) && rm -rf build && mkdir -p build && cd build && \
+	# C23's const-generic strchr returns const char * for this const input.
+	cd $(WLROOTS_PATH) && sed -i "s/char \\*colon = strchr(path, ':');/const char *colon = strchr(path, ':');/" xcursor/xcursor.c && \
+	mkdir -p build && if [ ! -f build/build.ninja ]; then \
 	PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
 	CFLAGS="-I$(STAGING_PATH)/usr/include" LDFLAGS="-L$(STAGING_PATH)/usr/lib" \
+	meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release -D backends=drm,libinput -D renderers=gles2 -D examples=false build .; fi && \
+	cd build && \
 	PKG_CONFIG_PATH="$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig" \
-	meson setup --native-file $(SRC_PATH)/cross_file.txt --prefix=/usr --buildtype=release -D backends=drm,libinput -D renderers=gles2 -D examples=false .. && ninja && DESTDIR=$(STAGING_PATH) ninja install && \
+	ninja && DESTDIR=$(STAGING_PATH) ninja install && \
 	sed -i 's|prefix=/usr|prefix=$(STAGING_PATH)/usr|g' $(STAGING_PATH)/usr/lib/pkgconfig/wlroots*.pc
 	touch .wlroots-done
 

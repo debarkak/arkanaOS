@@ -302,6 +302,7 @@ dirs: .dirs-done
 
 .dirs-done:
 	mkdir -p $(STAGING_PATH) $(OUTPUT_PATH) $(SRC_PATH)
+	chmod 0755 $(STAGING_PATH)
 
 	mkdir -p $(STAGING_PATH)/{boot,dev,etc,home,mnt,opt,proc,root,run,sys,tmp,var}
 	mkdir -p $(STAGING_PATH)/usr/{bin,include,lib,local,share,src}
@@ -328,6 +329,7 @@ dirs: .dirs-done
 		'' \
 		'[properties]' \
 		"pkg_config_libdir = '$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig'" \
+		"sys_root = '$(STAGING_PATH)'" \
 		'' \
 		'[host_machine]' \
 		"system = 'linux'" \
@@ -363,12 +365,16 @@ download-glibc: .glibc-obtained
 .PHONY: glibc
 glibc: download-glibc .glibc-done
 
+# Glibc's internal partial and shared-library links are not compatible with
+# mold; use GNU BFD for Glibc while keeping mold for the rest of the system.
+# Glibc's install hook passes install_root to its built ldconfig; keep it in
+# staging so this install cannot update the builder's dynamic linker cache.
 .glibc-done:
 	mkdir -p $(GLIBC_PATH)/build
-	cd $(GLIBC_PATH)/build && CFLAGS="-O2 -std=gnu17" ../configure --prefix=/usr --disable-werror --enable-kernel=5.4 \
-	--enable-stack-protector=strong --disable-nscd --enable-shared libc_cv_slibdir=/usr/lib && sed -i '/^CFLAGS/ s/$$/ -O2/' Makefile && $(MAKE) -j$(THREADS) && \
-	$(MAKE) DESTDIR=$(STAGING_PATH) install
-	chmod -R 777 $(STAGING_PATH) $(OUTPUT_PATH) 2>/dev/null || true
+	cd $(GLIBC_PATH)/build && CFLAGS="-O2 -std=gnu17" LDFLAGS="-fuse-ld=bfd -Wl,-O1 -Wl,--as-needed" ../configure --prefix=/usr --disable-werror --enable-kernel=5.4 \
+	--enable-stack-protector=strong --disable-nscd --enable-shared libc_cv_slibdir=/usr/lib && sed -i '/^CFLAGS/ s/$$/ -O2/' Makefile && \
+	$(MAKE) LDFLAGS="-fuse-ld=bfd -Wl,-O1 -Wl,--as-needed" -j$(THREADS) && \
+	$(MAKE) DESTDIR=$(STAGING_PATH) install_root=$(STAGING_PATH) install
 	grep -q 'IPPROTO_AGGFRAG' $(STAGING_PATH)/usr/include/netinet/in.h || \
 	  sed -i '/IPPROTO_RAW = 255/a\\    IPPROTO_AGGFRAG = 147,' $(STAGING_PATH)/usr/include/netinet/in.h
 	touch .glibc-done
@@ -537,6 +543,8 @@ download-gcc: .gcc-obtained
 .PHONY: gcc
 gcc: download-gcc .gcc-done
 
+# GCC's bundled libcody requires exactly C++11; the global C++17 flag would
+# override libcody's own -std=c++11 check.
 .gcc-done:
 	cd $(GCC_PATH) && wget --tries=5 --timeout=30 -c https://ftp.gnu.org/gnu/gettext/gettext-0.22.tar.gz && \
 	wget --tries=5 --timeout=30 -c https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.bz2 && \
@@ -546,7 +554,7 @@ gcc: download-gcc .gcc-done
 	./contrib/download_prerequisites --no-force && \
 	find libcody -type f \( -name "*.cc" -o -name "*.hh" \) -exec sed -i 's/u8"/\"/g' {} +
 	rm -rf $(GCC_PATH)/build
-	mkdir -p $(GCC_PATH)/build && cd $(GCC_PATH)/build && CFLAGS="-O2 -std=gnu17" ../configure --prefix=/usr --disable-multilib \
+	mkdir -p $(GCC_PATH)/build && cd $(GCC_PATH)/build && CFLAGS="-O2 -std=gnu17" CXXFLAGS="-O2 -pipe" ../configure --prefix=/usr --disable-multilib \
 	--enable-languages=c,c++ --disable-bootstrap --disable-libsanitizer --disable-libvtv --disable-libitm --disable-libquadmath && $(MAKE) -j$(THREADS) all-target-libstdc++-v3 all-target-libgcc && $(MAKE) DESTDIR=$(STAGING_PATH) install-target-libstdc++-v3 install-target-libgcc
 	touch .gcc-done
 

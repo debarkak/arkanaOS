@@ -444,8 +444,10 @@ download-libidn2: .libidn2-obtained
 # Compile libidn2
 libidn2: download-libidn2 .libidn2-done
 
+# Keep libidn2 on its bundled libunistring: linking the host's same-named
+# library while building the bundled target makes libtool try to extract its own archive.
 .libidn2-done:
-	cd $(LIBIDN2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr && mkdir -p unistring/.libs gl/.libs && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
+	cd $(LIBIDN2_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --with-included-libunistring && mkdir -p unistring/.libs gl/.libs && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .libidn2-done
 
 # Download libunistring

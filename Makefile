@@ -59,7 +59,10 @@ all: arkanas
 arkanas: $(SRC_PATH)/cross_file.txt
 	mkdir -p $(SRC_PATH) $(STAGING_PATH) $(ISO_STAGING_PATH) $(CPIO_STAGING_PATH) $(OUTPUT_PATH)
 	for arkana in arkanas/*.mk; do \
-		$(MAKE) -f $$arkana || { echo "fatal: failed to make the $$arkana arkana"; exit 1; } \
+		if [ "$$arkana" = "arkanas/05_graphics.mk" ]; then \
+			$(MAKE) -f arkanas/07_iso.mk libpng || { echo "fatal: failed to make libpng"; exit 1; }; \
+		fi; \
+		$(MAKE) -f $$arkana || { echo "fatal: failed to make the $$arkana arkana"; exit 1; }; \
 	done
 	$(MAKE) check-libs
 
@@ -82,6 +85,7 @@ $(SRC_PATH)/cross_file.txt:
 		'' \
 		'[properties]' \
 		"pkg_config_libdir = '$(STAGING_PATH)/usr/lib/pkgconfig:$(STAGING_PATH)/usr/share/pkgconfig'" \
+		"sys_root = '$(STAGING_PATH)'" \
 		'' \
 		'[host_machine]' \
 		"system = 'linux'" \
@@ -110,10 +114,12 @@ check-libs:
 	echo "checking missing libraries..."
 	> $(MISSING_LIBS)
 	while read -r file; do \
-	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
+	  library_path=; case "$$file" in /opt/firefox/*) library_path=/opt/firefox ;; esac; \
+	  chroot $(STAGING_PATH) /bin/sh -c "LD_LIBRARY_PATH=$$library_path ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
 	done < $(EXECUTABLES)
 	while read -r file; do \
-	  chroot $(STAGING_PATH) /bin/sh -c "ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
+	  library_path=; case "$$file" in /opt/firefox/*) library_path=/opt/firefox ;; esac; \
+	  chroot $(STAGING_PATH) /bin/sh -c "LD_LIBRARY_PATH=$$library_path ldd \"$$file\"" 2>/dev/null | grep "not found" | awk -v f="$$file" '{$$1=$$1;print $$0, "in", f}' >> $(MISSING_LIBS) || true; \
 	done < $(LIBRARIES)
 	rm -f $(STAGING_PATH)/dev/null
 	if [ -s $(MISSING_LIBS) ]; then \

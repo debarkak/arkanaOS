@@ -145,6 +145,8 @@ download-binutils: .binutils-obtained
 # Compile binutils
 binutils: download-binutils .binutils-done
 .binutils-done:
+	# Recursive configure caches retain linker flags from earlier build attempts.
+	find $(BINUTILS_PATH) -name config.cache -delete
 	cd $(BINUTILS_PATH) && CFLAGS="-O2 -std=gnu17" ./configure --prefix=/usr --enable-gold --enable-ld=default --enable-plugins --enable-shared --disable-werror --enable-64bit-bfd --with-system-zlib --disable-gprofng && $(MAKE) tooldir=/usr -j$(THREADS) && $(MAKE) tooldir=/usr DESTDIR=$(STAGING_PATH) install
 	touch .binutils-done
 
@@ -213,7 +215,7 @@ download-cmake: .cmake-obtained
 # Compile cmake
 cmake: download-cmake .cmake-done
 .cmake-done:
-	cd $(CMAKE_PATH) && sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake && CFLAGS="-O2 -std=gnu17" CXXFLAGS="-O2 -std=gnu++17" ./bootstrap --prefix=/usr --system-libs --mandir=/share/man --no-system-jsoncpp \
+	cd $(CMAKE_PATH) && sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake && CFLAGS="-O2 -std=gnu17" CXXFLAGS="-O2 -std=gnu++17" ./bootstrap --parallel=$(THREADS) --prefix=/usr --system-libs --mandir=/share/man --no-system-jsoncpp \
 	--no-system-cppdap --no-system-librhash --docdir=/share/doc/cmake-$(CMAKE_VER).tar.gz && $(MAKE) -j$(THREADS) && $(MAKE) DESTDIR=$(STAGING_PATH) install
 	touch .cmake-done
 
